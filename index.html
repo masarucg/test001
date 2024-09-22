@@ -92,7 +92,7 @@
             // 自動延長の追加
             const autoExtend = document.getElementById("autoExtend").checked;
             if (autoExtend) {
-                if (seki === 3000) {
+                if (seki === 5000) {
                     seki += 2000; // 通常席
                 } else if (seki === 10000) {
                     seki += 5000; // VIP席
@@ -149,7 +149,7 @@
         <!-- 席料選択 -->
         <div class="input-group">
             <label>席料:</label><br>
-            <input type="radio" id="seki1" name="seki" value="3000" onclick="calculate()"> 通常（3,000円）<br>
+            <input type="radio" id="seki1" name="seki" value="5000" onclick="calculate()"> 通常（5,000円）<br>
             <input type="radio" id="seki2" name="seki" value="10000" onclick="calculate()"> VIP（10,000円）<br>
             <input type="radio" id="seki3" name="seki" value="25000" onclick="calculate()"> EXVIP（25,000円）
         </div>
@@ -188,7 +188,7 @@
         役職 : 5,000円<br>
         非役職 : 3,000円</p>
         <p><strong>【席料】</strong><br>
-        通常 : 3,000円<br>
+        通常 : 5,000円<br>
         VIP : 10,000円<br>
         EXVIP : 25,000円</p>
         <p class="small-text">※クイックの小計は【席料】のみ<br>
