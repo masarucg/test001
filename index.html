@@ -84,11 +84,6 @@
                 shimei = parseFloat(document.getElementById("shimei2").value);
             }
 
-            // 同伴料がチェックされている場合、指名料を加算
-            if (document.getElementById("douhan").checked) {
-                subtotal += shimei;
-            }
-
             // 席料のチェックボックスの選択値を取得
             if (document.getElementById("seki1").checked) {
                 seki = parseFloat(document.getElementById("seki1").value);
@@ -98,24 +93,29 @@
                 seki = parseFloat(document.getElementById("seki3").value);
             }
 
-            // 自動延長の追加
-            const autoExtend = document.getElementById("autoExtend").checked;
-            if (autoExtend) {
-                if (seki === 5000) {
-                    seki += 2000; // 通常席
-                } else if (seki === 10000) {
-                    seki += 5000; // VIP席
-                } else if (seki === 25000) {
-                    seki += 10000; // EXVIP席
-                }
-            }
-
             // リピのチェック
             const repeat = document.getElementById("repeat").checked;
             if (repeat) {
                 subtotal = 8000;
                 shimei = 0;
                 seki = 0;
+            }
+
+            // 同伴料がチェックされている場合、指名料を加算
+            if (document.getElementById("douhan").checked) {
+                subtotal += shimei;
+            }
+
+            // 自動延長の追加
+            const autoExtend = document.getElementById("autoExtend").checked;
+            if (autoExtend) {
+                if (document.getElementById("seki1").checked) {
+                    subtotal += 2000; // 通常席
+                } else if (document.getElementById("seki2").checked) {
+                    subtotal += 5000; // VIP席
+                } else if (document.getElementById("seki3").checked) {
+                    subtotal += 10000; // EXVIP席
+                }
             }
 
             // 総小計（1000円未満切り上げ）
@@ -164,6 +164,16 @@
             <input type="checkbox" id="shimei2" name="shimei-group" value="3000" onclick="toggleCheckbox('shimei-group', 'shimei2')"> 非役職（3,000円）
         </div>
 
+        <!-- リピ選択（同伴の上に移動し、（）内の文字を削除） -->
+        <div class="input-group">
+            <label>リピ: <input type="checkbox" id="repeat" onclick="calculate()"></label>
+        </div>
+
+        <!-- 同伴料選択 -->
+        <div class="input-group">
+            <label>同伴料: <input type="checkbox" id="douhan" onclick="calculate()"></label>
+        </div>
+
         <!-- 席料選択 -->
         <div class="input-group">
             <label>席料:</label><br>
@@ -172,19 +182,9 @@
             <input type="checkbox" id="seki3" name="seki-group" value="25000" onclick="toggleCheckbox('seki-group', 'seki3')"> EXVIP（25,000円）
         </div>
 
-        <!-- 同伴料選択 -->
-        <div class="input-group">
-            <label>同伴料: <input type="checkbox" id="douhan" onclick="calculate()"> (指名料と同額)</label>
-        </div>
-
         <!-- 自動延長選択 -->
         <div class="input-group">
             <label>自動延長: <input type="checkbox" id="autoExtend" onclick="calculate()"> (席料に応じて追加)</label>
-        </div>
-
-        <!-- リピ選択 -->
-        <div class="input-group">
-            <label>リピ: <input type="checkbox" id="repeat" onclick="calculate()"> (指名料・席料を消して小計を8,000円に設定)</label>
         </div>
 
         <!-- 他小計入力 -->
