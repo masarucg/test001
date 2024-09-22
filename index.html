@@ -75,7 +75,7 @@
         function calculate() {
             let shimei = 0;
             let seki = 0;
-            let subtotal = parseFloat(document.getElementById("subtotal").value) || 0;
+            let subtotal = 0;
 
             // 指名料のチェックボックスの選択値を取得
             if (document.getElementById("shimei1").checked) {
@@ -97,8 +97,8 @@
             const repeat = document.getElementById("repeat").checked;
             if (repeat) {
                 subtotal = 8000;
-                shimei = 0;
-                seki = 0;
+            } else {
+                subtotal = parseFloat(document.getElementById("subtotal").value) || 0;
             }
 
             // 同伴料がチェックされている場合、指名料を加算
@@ -184,7 +184,7 @@
 
         <!-- 自動延長選択 -->
         <div class="input-group">
-            <label>自動延長: <input type="checkbox" id="autoExtend" onclick="calculate()"> (席料に応じて追加)</label>
+            <label>自動延長: <input type="checkbox" id="autoExtend" onclick="calculate()"></label>
         </div>
 
         <!-- 他小計入力 -->
@@ -208,4 +208,9 @@
         <p><strong>【席料】</strong><br>
         通常 : 5,000円<br>
         VIP : 10,000円<br>
-        EXVIP : 
+        EXVIP : 25,000円</p>
+        <p class="small-text">※クイックの小計は【席料】のみ<br>
+        ※1000円未満繰り上げは小計と総合計の2回</p>
+    </div>
+</body>
+</html>
