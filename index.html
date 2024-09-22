@@ -105,7 +105,7 @@
 
             // 同伴料がチェックされている場合、リピート選択時でも加算
             if (document.getElementById("douhan").checked) {
-                subtotal += shimei; // 同伴料がチェックされている場合、指名料を加算
+                subtotal += parseFloat(document.getElementById("shimei1").checked ? document.getElementById("shimei1").value : document.getElementById("shimei2").value); // 同伴料がチェックされている場合、指名料を加算
             }
 
             // 自動延長の追加
