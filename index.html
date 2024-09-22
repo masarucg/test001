@@ -57,7 +57,7 @@
         .input-group {
             margin-bottom: 15px;
         }
-        input[type="number"], input[type="radio"], input[type="checkbox"] {
+        input[type="number"], input[type="checkbox"] {
             margin-right: 10px;
         }
         .small-text {
@@ -75,18 +75,27 @@
         function calculate() {
             let shimei = 0;
             let seki = 0;
-            let subtotal = 0;
+            let subtotal = parseFloat(document.getElementById("subtotal").value) || 0;
 
-            // 指名料の選択値を取得
-            const shimeiRadio = document.querySelector('input[name="shimei"]:checked');
-            if (shimeiRadio) {
-                shimei = parseFloat(shimeiRadio.value);
+            // 指名料のチェックボックスの選択値を取得
+            if (document.getElementById("shimei1").checked) {
+                shimei = parseFloat(document.getElementById("shimei1").value);
+            } else if (document.getElementById("shimei2").checked) {
+                shimei = parseFloat(document.getElementById("shimei2").value);
             }
 
-            // 席料の選択値を取得
-            const sekiRadio = document.querySelector('input[name="seki"]:checked');
-            if (sekiRadio) {
-                seki = parseFloat(sekiRadio.value);
+            // 同伴料がチェックされている場合、指名料を加算
+            if (document.getElementById("douhan").checked) {
+                subtotal += shimei;
+            }
+
+            // 席料のチェックボックスの選択値を取得
+            if (document.getElementById("seki1").checked) {
+                seki = parseFloat(document.getElementById("seki1").value);
+            } else if (document.getElementById("seki2").checked) {
+                seki = parseFloat(document.getElementById("seki2").value);
+            } else if (document.getElementById("seki3").checked) {
+                seki = parseFloat(document.getElementById("seki3").value);
             }
 
             // 自動延長の追加
@@ -107,8 +116,6 @@
                 subtotal = 8000;
                 shimei = 0;
                 seki = 0;
-            } else {
-                subtotal = parseFloat(document.getElementById("subtotal").value) || 0;
             }
 
             // 総小計（1000円未満切り上げ）
@@ -118,6 +125,17 @@
             // 総合計（1000円未満切り上げして1.43倍）
             let total2 = Math.ceil(total1 * 1.43 / 1000) * 1000;
             document.getElementById("total2").innerText = total2;
+        }
+
+        // 同じカテゴリ内で複数のチェックボックスを選択できないようにする
+        function toggleCheckbox(group, id) {
+            const checkboxes = document.getElementsByName(group);
+            checkboxes.forEach((checkbox) => {
+                if (checkbox.id !== id) {
+                    checkbox.checked = false;
+                }
+            });
+            calculate();
         }
 
         function toggleMemo() {
@@ -142,16 +160,16 @@
         <!-- 指名料選択 -->
         <div class="input-group">
             <label>指名料:</label><br>
-            <input type="radio" id="shimei1" name="shimei" value="5000" onclick="calculate()"> 役職（5,000円）<br>
-            <input type="radio" id="shimei2" name="shimei" value="3000" onclick="calculate()"> 非役職（3,000円）
+            <input type="checkbox" id="shimei1" name="shimei-group" value="5000" onclick="toggleCheckbox('shimei-group', 'shimei1')"> 役職（5,000円）<br>
+            <input type="checkbox" id="shimei2" name="shimei-group" value="3000" onclick="toggleCheckbox('shimei-group', 'shimei2')"> 非役職（3,000円）
         </div>
 
         <!-- 席料選択 -->
         <div class="input-group">
             <label>席料:</label><br>
-            <input type="radio" id="seki1" name="seki" value="5000" onclick="calculate()"> 通常（5,000円）<br>
-            <input type="radio" id="seki2" name="seki" value="10000" onclick="calculate()"> VIP（10,000円）<br>
-            <input type="radio" id="seki3" name="seki" value="25000" onclick="calculate()"> EXVIP（25,000円）
+            <input type="checkbox" id="seki1" name="seki-group" value="5000" onclick="toggleCheckbox('seki-group', 'seki1')"> 通常（5,000円）<br>
+            <input type="checkbox" id="seki2" name="seki-group" value="10000" onclick="toggleCheckbox('seki-group', 'seki2')"> VIP（10,000円）<br>
+            <input type="checkbox" id="seki3" name="seki-group" value="25000" onclick="toggleCheckbox('seki-group', 'seki3')"> EXVIP（25,000円）
         </div>
 
         <!-- 同伴料選択 -->
