@@ -103,27 +103,21 @@
                 subtotal += shimei + seki; // リピートでない場合、指名料と席料を加算
             }
 
-            // 同伴料の追加（席料に応じて加算）
+            // 同伴料がチェックされている場合、リピート選択時でも加算
             const douhan = document.getElementById("douhan").checked;
             if (douhan) {
-                if (document.getElementById("seki1").checked) {
-                    subtotal += 5000; // 通常席の同伴料
-                } else if (document.getElementById("seki2").checked) {
-                    subtotal += 10000; // VIP席の同伴料
-                } else if (document.getElementById("seki3").checked) {
-                    subtotal += 15000; // EXVIP席の同伴料
-                }
+                subtotal += shimei; // 同伴料がチェックされている場合、指名料と同額を加算
             }
 
             // 自動延長の追加
             const autoExtend = document.getElementById("autoExtend").checked;
             if (autoExtend) {
                 if (document.getElementById("seki1").checked) {
-                    subtotal += 2000; // 通常席の自動延長
+                    subtotal += 2000; // 通常席
                 } else if (document.getElementById("seki2").checked) {
-                    subtotal += 5000; // VIP席の自動延長
+                    subtotal += 5000; // VIP席
                 } else if (document.getElementById("seki3").checked) {
-                    subtotal += 10000; // EXVIP席の自動延長
+                    subtotal += 10000; // EXVIP席
                 }
             }
 
