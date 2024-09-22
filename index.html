@@ -97,8 +97,8 @@
             const repeat = document.getElementById("repeat").checked;
             if (repeat) {
                 subtotal = 8000;
-            } else {
-                subtotal = parseFloat(document.getElementById("subtotal").value) || 0;
+                shimei = 0;
+                seki = 0;
             }
 
             // 同伴料がチェックされている場合、指名料を加算
@@ -117,6 +117,9 @@
                     subtotal += 10000; // EXVIP席
                 }
             }
+
+            // 他小計を加算
+            subtotal += parseFloat(document.getElementById("subtotal").value) || 0;
 
             // 総小計（1000円未満切り上げ）
             let total1 = Math.ceil((shimei + seki + subtotal) / 1000) * 1000;
