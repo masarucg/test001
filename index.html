@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>計算ページ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f7f7f7;
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+        .container {
+            width: 70%;
+            transition: width 0.3s;
+        }
+        .memo {
+            width: 75%;
+            height: 75vh;
+            padding: 20px 30px; /* 左右のパディングを追加して中央寄せ */
+            background-color: rgba(255, 255, 255, 0.9);
+            position: fixed;
+            top: 12.5vh;
+            right: 12.5%;
+            overflow-y: auto;
+            z-index: 10;
+            display: none;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        .toggle-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            z-index: 11;
+            transition: transform 0.3s;
+        }
+        h1 {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label, p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        input[type="number"], input[type="radio"], input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .small-text {
+            font-size: 14px; /* 注意書きのサイズを小さく */
+            margin-top: 10px;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        function calculate() {
+            let shimei = 0;
+            let seki = 0;
+            let subtotal = 0;
+
+            // 指名料の選択値を取得
+            const shimeiRadio = document.querySelector('input[name="shimei"]:checked');
+            if (shimeiRadio) {
+                shimei = parseFloat(shimeiRadio.value);
+            }
+
+            // 席料の選択値を取得
+            const sekiRadio = document.querySelector('input[name="seki"]:checked');
+            if (sekiRadio) {
+                seki = parseFloat(sekiRadio.value);
+            }
+
+            // 自動延長の追加
+            const autoExtend = document.getElementById("autoExtend").checked;
+            if (autoExtend) {
+                if (seki === 3000) {
+                    seki += 2000; // 通常席
+                } else if (seki === 10000) {
+                    seki += 5000; // VIP席
+                } else if (seki === 25000) {
+                    seki += 10000; // EXVIP席
+                }
+            }
+
+            // リピのチェック
+            const repeat = document.getElementById("repeat").checked;
+            if (repeat) {
+                subtotal = 8000;
+                shimei = 0;
+                seki = 0;
+            } else {
+                subtotal = parseFloat(document.getElementById("subtotal").value) || 0;
+            }
+
+            // 総小計（1000円未満切り上げ）
+            let total1 = Math.ceil((shimei + seki + subtotal) / 1000) * 1000;
+            document.getElementById("total1").innerText = total1;
+
+            // 総合計（1000円未満切り上げして1.43倍）
+            let total2 = Math.ceil(total1 * 1.43 / 1000) * 1000;
+            document.getElementById("total2").innerText = total2;
+        }
+
+        function toggleMemo() {
+            const memo = document.querySelector('.memo');
+            const button = document.querySelector('.toggle-button');
+            if (memo.style.display === 'none' || memo.style.display === '') {
+                memo.style.display = 'block';
+                button.textContent = '料金表を閉じる';
+                button.style.transform = 'scale(0.8)';
+            } else {
+                memo.style.display = 'none';
+                button.textContent = '料金表を開く';
+                button.style.transform = 'scale(1)';
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>計算ページ</h1>
+
+        <!-- 指名料選択 -->
+        <div class="input-group">
+            <label>指名料:</label><br>
+            <input type="radio" id="shimei1" name="shimei" value="5000" onclick="calculate()"> 役職（5,000円）<br>
+            <input type="radio" id="shimei2" name="shimei" value="3000" onclick="calculate()"> 非役職（3,000円）
+        </div>
+
+        <!-- 席料選択 -->
+        <div class="input-group">
+            <label>席料:</label><br>
+            <input type="radio" id="seki1" name="seki" value="3000" onclick="calculate()"> 通常（3,000円）<br>
+            <input type="radio" id="seki2" name="seki" value="10000" onclick="calculate()"> VIP（10,000円）<br>
+            <input type="radio" id="seki3" name="seki" value="25000" onclick="calculate()"> EXVIP（25,000円）
+        </div>
+
+        <!-- 同伴料選択 -->
+        <div class="input-group">
+            <label>同伴料: <input type="checkbox" id="douhan" onclick="calculate()"> (指名料と同額)</label>
+        </div>
+
+        <!-- 自動延長選択 -->
+        <div class="input-group">
+            <label>自動延長: <input type="checkbox" id="autoExtend" onclick="calculate()"> (席料に応じて追加)</label>
+        </div>
+
+        <!-- リピ選択 -->
+        <div class="input-group">
+            <label>リピ: <input type="checkbox" id="repeat" onclick="calculate()"> (指名料・席料を消して小計を8,000円に設定)</label>
+        </div>
+
+        <!-- 他小計入力 -->
+        <div class="input-group">
+            <label>他小計: <input type="number" id="subtotal" oninput="calculate()" placeholder="他小計を入力"> 円</label>
+        </div>
+
+        <!-- 結果表示 -->
+        <div class="result">
+            <p>1. 総小計: <span id="total1">0</span> 円</p>
+            <p>2. 総合計: <span id="total2">0</span> 円</p>
+        </div>
+    </div>
+
+    <button class="toggle-button" onclick="toggleMemo()">料金表を開く</button>
+
+    <div class="memo">
+        <p><strong>【指名料】</strong><br>
+        役職 : 5,000円<br>
+        非役職 : 3,000円</p>
+        <p><strong>【席料】</strong><br>
+        通常 : 3,000円<br>
+        VIP : 10,000円<br>
+        EXVIP : 25,000円</p>
+        <p class="small-text">※クイックの小計は【席料】のみ<br>
+        ※1000円未満繰り上げは小計と総合計の2回</p>
+    </div>
+</body>
+</html>
