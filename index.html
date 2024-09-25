@@ -119,11 +119,16 @@
 
             // 総小計（1000円未満切り上げ）
             let total1 = Math.ceil((subtotal) / 1000) * 1000;
-            document.getElementById("total1").innerText = total1;
+            document.getElementById("total1").innerText = formatCurrency(total1);
 
             // 総合計（1000円未満切り上げして1.43倍）
             let total2 = Math.ceil(total1 * 1.43 / 1000) * 1000;
-            document.getElementById("total2").innerText = total2;
+            document.getElementById("total2").innerText = formatCurrency(total2);
+        }
+
+        // カンマ付きの通貨形式に変換する関数
+        function formatCurrency(value) {
+            return value.toLocaleString('ja-JP') + ' 円';
         }
 
         // 同じカテゴリ内で複数のチェックボックスを選択できないようにする
@@ -203,4 +208,8 @@
         通常 : 5,000円<br>
         VIP : 10,000円<br>
         EXVIP : 25,000円</p>
-        <p class="small-text">※クイックの小計は
+        <p class="small-text">※クイックの小計は【席料】のみ<br>
+        ※1000円未満繰り上げは小計と総合計の2回</p>
+    </div>
+</body>
+</html>
